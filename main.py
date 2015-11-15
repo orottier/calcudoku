@@ -2,9 +2,12 @@ from CalcuDoku import CalcuDoku
 from Block import Block
 
 def blockGenerator(rows = []):
-    return [
-            [[1,2,3,4],[3,3,4,1],[3,4,1,2],[4,1,2,3]]
-           ]
+    return [[
+            [1,2,4,3],
+            [3,4,2,1],
+            [4,1,3,2],
+            [2,3,1,4]
+            ]]
 
 # main:
 calcuDoku = CalcuDoku(4)

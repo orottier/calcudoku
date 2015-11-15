@@ -1,24 +1,26 @@
+import operator
+
 def minus(values):
     return 2*max(values) - sum(values)
 
-def plus(values):
-    return sum(values)
-
 def times(values):
-    total = 1
-    for v in values:
-        total = v*total
-    return total
+    return reduce(operator.mul, values, 1)
+
+def divide(values):
+    m = max(values)
+    return reduce(operator.div, [v for v in values if v != m], m)
+
 
 class Block:
     def __init__(self, operation, result):
-        if(operation == "*"):
-                self.op = times
-        if(operation == "-"):
-                self.op = minus
-        if(operation == "+"):
-                self.op = plus
+        ops = {
+                "*": times,
+                "/": divide,
+                "+": sum, #builtin
+                "-": minus
+        }
 
+        self.op = ops[operation]
         self.operation = operation
         self.result = result
         self.locations = []
@@ -34,5 +36,3 @@ class Block:
             values.append(matrix[x][y])
 
         return self.op(values) == self.result
-
-
