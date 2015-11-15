@@ -1,16 +1,10 @@
 from CalcuDoku import CalcuDoku
 from Block import Block
+from MatrixGenerator import MatrixGenerator
 
-def blockGenerator(rows = []):
-    return [[
-            [1,2,4,3],
-            [3,4,2,1],
-            [4,1,3,2],
-            [2,3,1,4]
-            ]]
-
-# main:
-calcuDoku = CalcuDoku(4)
+size = 4
+m = MatrixGenerator(size)
+calcuDoku = CalcuDoku(size)
 
 b = Block("*", 6)
 b.addLocation(1,1)
@@ -47,7 +41,7 @@ print "Need to solve:"
 calcuDoku.printMatrix()
 
 print "Solution:"
-for matrix in blockGenerator():
+for matrix in m.possibleMatrices():
     if calcuDoku.check(matrix):
         calcuDoku.printMatrix(matrix)
         break
