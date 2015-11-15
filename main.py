@@ -1,57 +1,53 @@
-def minus(values):
-    return 2*max(values) - sum(values)
-
-def plus(values):
-    return sum(values)
-
-def times(values):
-    total = 1
-    for v in values:
-        total = v*total
-    return total
-
-class Block:
-    def __init__(self, op, result):
-        if(op == "*"):
-                self.op = times
-        if(op == "-"):
-                self.op = minus
-        if(op == "+"):
-                self.op = plus
-
-        self.result = result
-        self.locations = []
-
-    def addLocation(self, tuple):
-        self.locations.append(tuple)
-
-    def check(self, matrix):
-        # only associative ops now
-        values = []
-        for (x,y) in self.locations:
-            values.append(matrix[x][y])
-
-        return self.op(values) == self.result
+from CalcuDoku import CalcuDoku
+from Block import Block
 
 def blockGenerator(rows = []):
-    return [
-            [[1,2,3,4],[3,3,4,1],[3,4,1,2],[4,1,2,3]]
-           ]
+    return [[
+            [1,2,4,3],
+            [3,4,2,1],
+            [4,1,3,2],
+            [2,3,1,4]
+            ]]
 
 # main:
-blocks = []
+calcuDoku = CalcuDoku(4)
 
 b = Block("*", 6)
-b.addLocation((0,0))
-b.addLocation((0,1))
-b.addLocation((1,0))
-blocks.append(b)
+b.addLocation(1,1)
+b.addLocation(1,2)
+b.addLocation(2,1)
+calcuDoku.addBlock(b)
 
-for test in blockGenerator():
-    skip = False
-    for b in blocks:
-        if not b.check(test):
-            skip = true
-            break
-    if not skip:
-        print test
+b = Block("*", 24)
+b.addLocation(1,3)
+b.addLocation(1,4)
+b.addLocation(2,3)
+calcuDoku.addBlock(b)
+
+b = Block("+", 11)
+b.addLocation(2,2)
+b.addLocation(3,1)
+b.addLocation(3,2)
+b.addLocation(4,1)
+calcuDoku.addBlock(b)
+
+b = Block("*", 2)
+b.addLocation(2,4)
+b.addLocation(3,4)
+calcuDoku.addBlock(b)
+
+b = Block("+", 11)
+b.addLocation(3,3)
+b.addLocation(4,2)
+b.addLocation(4,3)
+b.addLocation(4,4)
+calcuDoku.addBlock(b)
+
+print "Need to solve:"
+calcuDoku.printMatrix()
+
+print "Solution:"
+for matrix in blockGenerator():
+    if calcuDoku.check(matrix):
+        calcuDoku.printMatrix(matrix)
+        break
