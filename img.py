@@ -3,9 +3,11 @@ import os
 import subprocess
 import numpy
 import cv2
+from Block import Block
+from CalcuDoku import CalcuDoku
 
 """ based on https://github.com/KoffeinFlummi/SudokuSolver """
-debug = True
+debug = False
 
 def showImage(img, name):
     if debug:
@@ -145,8 +147,50 @@ showImage(img, "image")
 
 img = cutOut(img)
 
-(sudoku, right, below) = extractSudoku(img, int(sys.argv[2]))
+size = int(sys.argv[2])
+calcuDoku = CalcuDoku(size)
+(sudoku, right, below) = extractSudoku(img, size)
 print sudoku
 print right
 print below
+
+def discover(i, j):
+    print "checking ", i, j
+    global sectors
+    for (vertical, lateral) in [(0,1), (0,-1), (1,0), (-1,0)]:
+        print "v", vertical, "l", lateral
+        ii = i+vertical
+        ilat = i + (vertical-1)/2
+        jj = j+lateral
+        jlat = j + (lateral-1)/2
+        if ii in range(size) and jj in range(size):
+            if not sectors[ii][jj]:
+                if lateral and not right[i][jlat] or vertical and not below[ilat][j]:
+                    block = sectors[i][j]
+                    print "connecting", ii, jj, block.operation, block.result
+                    sectors[ii][jj] = block
+                    block.addLocation(ii+1, jj+1)
+                    calcuDoku.printMatrix()
+                    discover(ii, jj)
+                else:
+                    print "not connected"
+            else:
+                print "already discovered"
+        else:
+            print "outside"
+
+sectors = [[None for i in range(size)] for j in range(size)]
+for i in range(0, size):
+    for j in range(0, size):
+        if not sectors[i][j]:
+            if sudoku[i][j]:
+                ops = sudoku[i][j]
+                b = Block(ops[-1:], ops[:-1])
+                calcuDoku.addBlock(b)
+                b.addLocation(i+1, j+1)
+                sectors[i][j] = b
+                discover(i, j)
+            else:
+                print "huh"
+                sys.exit(1)
 

@@ -20,7 +20,7 @@ class CalcuDoku:
                     sys.stdout.write(' ')
                 else:
                     b = self.findBlock(i,j)
-                    if not b.printedYet:
+                    if b and not b.printedYet:
                         sys.stdout.write((str(b.result) + b.operation).ljust(3))
                         b.printedYet = True
                     else:
@@ -42,6 +42,8 @@ class CalcuDoku:
                 sys.stdout.write("|\n")
         print '\\' + '-'*(4*self.size-1) + '/'
         print
+        for b in self.blocks:
+            b.printedYet = False
 
     def connected(self, i, j, direction):
         if direction == 'right':

@@ -14,8 +14,8 @@ def divide(values):
 class Block:
     def __init__(self, operation, result):
         ops = {
-                "*": times,
-                "/": divide,
+                "x": times,
+                ":": divide,
                 "+": sum, #builtin
                 "-": minus
         }
