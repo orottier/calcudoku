@@ -1,41 +1,14 @@
-from CalcuDoku import CalcuDoku
-from Block import Block
+import sys
 from MatrixGenerator import MatrixGenerator
+from Block import Block
+from ImageReader import ImageReader
 
-size = 4
+path = sys.argv[1]
+size = int(sys.argv[2])
+
 m = MatrixGenerator(size)
-calcuDoku = CalcuDoku(size)
-
-b = Block("*", 6)
-b.addLocation(1,1)
-b.addLocation(1,2)
-b.addLocation(2,1)
-calcuDoku.addBlock(b)
-
-b = Block("*", 24)
-b.addLocation(1,3)
-b.addLocation(1,4)
-b.addLocation(2,3)
-calcuDoku.addBlock(b)
-
-b = Block("+", 11)
-b.addLocation(2,2)
-b.addLocation(3,1)
-b.addLocation(3,2)
-b.addLocation(4,1)
-calcuDoku.addBlock(b)
-
-b = Block("*", 2)
-b.addLocation(2,4)
-b.addLocation(3,4)
-calcuDoku.addBlock(b)
-
-b = Block("+", 11)
-b.addLocation(3,3)
-b.addLocation(4,2)
-b.addLocation(4,3)
-b.addLocation(4,4)
-calcuDoku.addBlock(b)
+reader = ImageReader(False, path, size)
+calcuDoku = reader.getCalcuDoku()
 
 print "Need to solve:"
 calcuDoku.printMatrix()
