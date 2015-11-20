@@ -178,7 +178,7 @@ class ImageReader:
                 if not self.sectors[i][j]:
                     if self.sudoku[i][j]:
                         ops = self.sudoku[i][j]
-                        b = Block(ops[-1:], ops[:-1])
+                        b = Block(ops)
                         self.calcuDoku.addBlock(b)
                         b.addLocation(i+1, j+1)
                         self.sectors[i][j] = b

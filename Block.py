@@ -12,7 +12,7 @@ def divide(values):
 
 
 class Block:
-    def __init__(self, operation, result):
+    def __init__(self, calculation):
         ops = {
                 "x": times,
                 ":": divide,
@@ -20,9 +20,15 @@ class Block:
                 "-": minus
         }
 
+        if calculation.isdigit():
+            calculation = calculation + "+"
+
+        result = calculation[:-1]
+        operation = calculation[-1:]
+
         self.op = ops[operation]
         self.operation = operation
-        self.result = result
+        self.result = int(result)
         self.locations = []
         self.printedYet = False
 
