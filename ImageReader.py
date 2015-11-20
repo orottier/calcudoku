@@ -132,7 +132,7 @@ class ImageReader:
         cv2.imwrite("tesseract/input.png", thresh)
 
         try:
-            subprocess.check_output("tesseract tesseract/input.png tesseract/output -psm 8 digits-chars", shell=True)
+            subprocess.check_output("tesseract tesseract/input.png tesseract/output -psm 8 calcudoku-chars", shell=True)
             digit = (open("tesseract/output.txt", "r").read())
         except:
             digit = ""
