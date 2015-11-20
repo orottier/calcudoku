@@ -5,3 +5,5 @@ Python solver for calcudokus
 Python:
  - cv2
  - numpy
+
+ Tesseract OCR
