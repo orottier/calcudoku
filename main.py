@@ -13,8 +13,10 @@ calcuDoku = reader.getCalcuDoku()
 print "Need to solve:"
 calcuDoku.printMatrix()
 
-print "Solution:"
+print "Solving..."
 for matrix in m.possibleMatrices():
     if calcuDoku.check(matrix):
+        print "Solution:"
         calcuDoku.printMatrix(matrix)
+        reader.writeSolution(matrix)
         break

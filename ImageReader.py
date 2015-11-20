@@ -73,6 +73,9 @@ class ImageReader:
         # Warp the image to be a square.
         persTrans = cv2.getPerspectiveTransform(pointsOriginal, pointsNew)
         fixedImage = cv2.warpPerspective(img, persTrans, (450,450))
+        # setup a reverse warp
+        self.pointsOriginal = pointsOriginal
+        self.warp = cv2.getPerspectiveTransform(pointsNew, pointsOriginal)
 
         self.showImage(fixedImage, "perspectivefix")
 
@@ -84,7 +87,7 @@ class ImageReader:
         self.right = []
         self.below = []
 
-        border = 5 # how much to cut off the edges to eliminate any of the lines between the cells
+        border = 6 # how much to cut off the edges to eliminate any of the lines between the cells
         piece = 450 / size
         for i in range(size):
             sudoku_temp = []
@@ -139,9 +142,7 @@ class ImageReader:
         return digit
 
     def discover(self, i, j):
-        print "checking ", i, j
         for (vertical, lateral) in [(0,1), (0,-1), (1,0), (-1,0)]:
-            print "v", vertical, "l", lateral
             ii = i+vertical
             ilat = i + (vertical-1)/2
             jj = j+lateral
@@ -150,17 +151,10 @@ class ImageReader:
                 if not self.sectors[ii][jj]:
                     if lateral and not self.right[i][jlat] or vertical and not self.below[ilat][j]:
                         block = self.sectors[i][j]
-                        print "connecting", ii, jj, block.operation, block.result
                         self.sectors[ii][jj] = block
                         block.addLocation(ii+1, jj+1)
                         self.calcuDoku.printMatrix()
                         self.discover(ii, jj)
-                    else:
-                        print "not connected"
-                else:
-                    print "already discovered"
-            else:
-                print "outside"
 
     def getCalcuDoku(self):
 
@@ -188,3 +182,25 @@ class ImageReader:
                         sys.exit(1)
 
         return self.calcuDoku
+
+    def writeSolution(self, solution):
+        overlay = 255*numpy.ones((450,450,3), numpy.uint8)
+        piece = 450 / self.size
+        for i in range(0, self.size):
+            for j in range(0, self.size):
+                cv2.putText(overlay, str(solution[j][i]), (piece*i+35, piece*j+80), cv2.FONT_HERSHEY_SIMPLEX, 2, 10)
+        self.showImage(overlay, "Overlay")
+        fixedImage = cv2.warpPerspective(overlay, self.warp, (self.img.shape[0],self.img.shape[1]))
+        self.showImage(fixedImage, "Perspective overlay")
+
+        self.overlayImage(fixedImage)
+        self.showImage(self.img, "Solution")
+
+    def overlayImage(self, overlay):
+        for x in range(min(overlay.shape[1], self.img.shape[1])):
+            for y in range(min(overlay.shape[0], self.img.shape[0])):
+                source = self.img[y, x]
+                over = overlay[y, x]
+                # skip black and white pixels, as we do not use an alpha channel
+                if over[0] != 255 and over[0] != 0:
+                    self.img[y, x] = (source + over)/2
