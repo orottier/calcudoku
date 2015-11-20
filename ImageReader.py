@@ -126,19 +126,16 @@ class ImageReader:
         subimg = cv2.cvtColor(subimg, cv2.COLOR_BGR2RGB)
         ret,thresh = cv2.threshold(subimg,127,255,cv2.THRESH_BINARY) # black-and-white for most contrast
 
-        tesinput = "temp.jpg"
-        tesoutput = "temp.txt"
-        cv2.imwrite(tesinput, thresh)
+        cv2.imwrite("tesseract/input.png", thresh)
 
         try:
-            subprocess.check_output("tesseract "+tesinput+" "+tesoutput[:-4]+" -psm 8", shell=True)
-            digit = (open(tesoutput, "r").read())
+            subprocess.check_output("tesseract tesseract/input.png tesseract/output -psm 8 digits-chars", shell=True)
+            digit = (open("tesseract/output.txt", "r").read())
         except:
+            digit = ""
             pass
 
-        os.remove(tesinput)
-        os.remove(tesoutput)
-
+        print "digit", digit.strip()
         return digit
 
     def discover(self, i, j):
