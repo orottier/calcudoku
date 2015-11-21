@@ -9,3 +9,12 @@ Python:
  - [numpy](http://www.numpy.org/)
 
 [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
+
+## Usage:
+`python main.py path/to/image.jpg size`
+
+Size is an integer denoting the width/height of the square calcudoku.
+
+## Todo
+Automatic size detection
+Train Tesseract for better number/operator detection
