@@ -190,7 +190,7 @@ class ImageReader:
             for j in range(0, self.size):
                 cv2.putText(overlay, str(solution[j][i]), (piece*i+35, piece*j+80), cv2.FONT_HERSHEY_SIMPLEX, 2, 10)
         self.showImage(overlay, "Overlay")
-        fixedImage = cv2.warpPerspective(overlay, self.warp, (self.img.shape[0],self.img.shape[1]))
+        fixedImage = cv2.warpPerspective(overlay, self.warp, (self.img.shape[1],self.img.shape[0]))
         self.showImage(fixedImage, "Perspective overlay")
 
         self.overlayImage(fixedImage)
