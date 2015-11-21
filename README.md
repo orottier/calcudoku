@@ -16,5 +16,5 @@ Python:
 Size is an integer denoting the width/height of the square calcudoku.
 
 ## Todo
-Automatic size detection
-Train Tesseract for better number/operator detection
+ - Automatic size detection
+ - Train Tesseract for better number/operator detection
